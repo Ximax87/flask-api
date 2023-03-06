@@ -1,4 +1,7 @@
+from flask import jsonify
+
 from . import app
+from .models import DBManager
 
 
 """
@@ -17,10 +20,32 @@ Versionar los endpoint (son un contrato)
 /api/v1/...
 
 
+/api/v1/facturas
+/api/v2/movimientos
+/api/v1/contatos
+/api/v1/usuarios
+/api/v1/donaciones
+/api/v1/compras
+
+Devuelve un array de objetos JSON o un objeto JSON.
+
+Por ejemplo, un movimiento:
+
+{
+  "id": 1,
+  "fecha": "2023-02-27",
+  "concepto": "Camiseta",
+  "tipo": "G",
+  "cantidad": 12.35
+}
 """
+
+RUTA = app.config.get('RUTA')
 
 
 @app.route('/')
 def inicio():
-    return (f'La ruta del archivo de datos es: {app.config["RUTA"]}<br>'
-            f'Secret key: {app.config["SECRET_KEY"]}')
+    db = DBManager(RUTA)
+    sql = 'SELECT * FROM movimientos'
+    movimientos = db.consultaSQL(sql)
+    return jsonify(movimientos)
