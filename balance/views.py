@@ -43,6 +43,11 @@ Por ejemplo, un movimiento:
 RUTA = app.config.get('RUTA')
 
 
+# TODO: obtener un movimiento por ID
+# TODO: actualizar movimiento por ID
+# TODO: eliminar movimiento por ID
+
+
 @app.route('/')
 def home():
     return render_template('index.html')
