@@ -45,7 +45,18 @@ RUTA = app.config.get('RUTA')
 
 @app.route('/')
 def inicio():
-    db = DBManager(RUTA)
-    sql = 'SELECT * FROM movimientos'
-    movimientos = db.consultaSQL(sql)
-    return jsonify(movimientos)
+    try:
+        db = DBManager(RUTA)
+        sql = 'SELECT * FROM movimientos'
+        movimientos = db.consultaSQL(sql)
+        resultado = {
+            "status": "success",
+            "results": movimientos
+        }
+    except Exception as error:
+        resultado = {
+            "status": "error",
+            "message": str(error)
+        }
+
+    return jsonify(resultado)
