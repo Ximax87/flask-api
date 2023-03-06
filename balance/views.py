@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, render_template
 
 from . import app
 from .models import DBManager
@@ -44,7 +44,12 @@ RUTA = app.config.get('RUTA')
 
 
 @app.route('/')
-def inicio():
+def home():
+    return render_template('index.html')
+
+
+@app.route('/api/v1/movimientos')
+def listar_movimientos():
     try:
         db = DBManager(RUTA)
         sql = 'SELECT * FROM movimientos'
