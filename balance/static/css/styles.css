@@ -1,0 +1,135 @@
+:root {
+  --primary-color: #b8174c;
+  --secondary-color: #19a187;
+
+  --medium-gray: #666;
+  --error-color: var(--primary-color);
+
+  --default-border: solid thin var(--secondary-color)
+}
+
+header {
+  background-color: var(--primary-color);
+  color: white;
+  height: 50px;
+  font-size: large;
+  line-height: 50px;
+  padding-left: 25px;
+}
+
+nav {
+  background-color: var(--secondary-color);
+  color: #FFF;
+  height: 25px;
+  line-height: 25px;
+  padding-left: 25px;
+}
+
+nav a,
+nav a:active,
+nav a:focus,
+nav a:hover,
+nav a:visited {
+  color: white;
+}
+
+main {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+}
+
+table.paper {
+  width: 100%;
+}
+
+.titulo-tabla {
+  border-bottom: var(--default-border);
+  text-align: left;
+}
+
+.numero,
+.acciones {
+  text-align: right;
+}
+
+.link-icon {
+  margin-right: 5px;
+}
+
+a.mini-boton:hover {
+  text-decoration: none;
+}
+
+a.button {
+  color: white;
+}
+
+.error {
+  color: var(--error-color);
+  font-size: small;
+  margin: 0;
+  line-height: normal;
+}
+
+.lista-vacia {
+  text-align: center;
+  padding: 20px;
+  color: var(--medium-gray);
+}
+
+.pie-pagina {
+  padding: 20px;
+  border-top: var(--default-border);
+}
+
+/* Estilos de formulario */
+.campo-formulario label {
+  display: block;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0;
+  margin-top: .75rem;
+}
+
+.campo-formulario>input[type="radio"]~label {
+  display: inline-block;
+  margin-bottom: .5rem;
+  margin-right: 2rem;
+}
+
+.campo-formulario input:not([type="radio"]) {
+  width: 100%;
+}
+
+.lista-errores {
+  font-size: 1rem;
+  background-color: rgba(200, 0, 0, .25);
+  padding: 2rem;
+  color: darkred;
+  border: solid 2px darkred;
+  border-radius: 3px;
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+}
+
+.lista-errores .mensajes-error {
+  margin-left: 2rem;
+}
+
+.exito-flash {
+  font-size: 1rem;
+  background-color: rgba(0, 200, 0, .25);
+  padding: 2rem;
+  color: darkgreen;
+  border: solid 2px darkgreen;
+  border-radius: 3px;
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+}
+
+.exito-flash .mensajes-flash {
+  margin-left: 2rem;
+}
