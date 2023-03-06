@@ -7,6 +7,25 @@ function cargarMovimientos() {
   peticion.open('GET', 'http://localhost:5000/api/v1/movimientos', false);
   peticion.send();
   console.log(peticion.responseText);
+  const respuesta = JSON.parse(peticion.responseText);
+  const movimientos = respuesta.results;
+
+  let html = '';
+  for (let i = 0; i < movimientos.length; i = i + 1) {
+    const mov = movimientos[i];
+    console.log('Movimiento', mov);
+    html = html + `
+      <tr>
+        <td>${mov.fecha}</td>
+        <td>${mov.concepto}</td>
+        <td>${mov.tipo}</td>
+        <td>${mov.cantidad}</td>
+      </tr>
+    `;
+  }
+
+  const tabla = document.querySelector('#cuerpo-tabla');
+  tabla.innerHTML += html;
 };
 
 window.onload = function () {
