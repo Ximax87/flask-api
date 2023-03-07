@@ -32,12 +32,16 @@ function mostrarMovimientos() {
         mov.tipo = '---';
       }
 
+      // TODO: Fecha en formato ES
+      // TODO: Ajustar los decimales de la cantidad
+      // TODO: Incluir los botones de acciones
+
       html = html + `
         <tr>
           <td>${mov.fecha}</td>
           <td>${mov.concepto}</td>
           <td>${mov.tipo}</td>
-          <td>${mov.cantidad}</td>
+          <td class="numero">${mov.cantidad}</td>
         </tr>
       `;
     }

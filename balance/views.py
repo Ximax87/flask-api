@@ -1,6 +1,7 @@
 from flask import jsonify, render_template
 
 from . import app
+from .forms import MovimientoForm
 from .models import DBManager
 
 
@@ -42,12 +43,19 @@ Por ejemplo, un movimiento:
 
 RUTA = app.config.get('RUTA')
 
-
+# TODO: crear un movimiento
 # TODO: actualizar movimiento por ID
+
 
 @app.route('/')
 def home():
     return render_template('index.html')
+
+
+@app.route('/nuevo')
+def form_nuevo():
+    formulario = MovimientoForm()
+    return render_template('form_movimiento.html', form=formulario, accion='/nuevo')
 
 
 @app.route('/api/v1/movimientos')

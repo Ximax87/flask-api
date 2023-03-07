@@ -1,53 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Balance App</title>
-  <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
-  <link rel="stylesheet" href="/static/css/flat-remix.css">
-  <link rel="stylesheet" href="/static/css/styles.css">
-  <script src="/static/js/balance.js"></script>
-</head>
+{% block scripts%}
+<script src="/static/js/balance.js"></script>
+{% endblock scripts %}
 
-<body>
 
-  {% include 'components/header.html' %}
-  {% include 'components/navbar.html' %}
 
-  <div class="overlay off" id="spinner">
-    <div class="doble-anillo"></div>
-  </div>
+{% block contenido %}
 
-  <main>
+<h1>App de movimientos</h1>
 
-    <h1>App de movimientos</h1>
+<section class="seccion-movimientos">
+  <button id="boton-recarga">Recargar</button>
+  <table class="paper">
+    <thead>
+      <tr>
+        <th class="titulo-tabla">Fecha</th>
+        <th class="titulo-tabla">Concepto</th>
+        <th class="titulo-tabla">Tipo</th>
+        <th class="titulo-tabla numero">Cantidad</th>
+        <th class="titulo-tabla acciones">Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="cuerpo-tabla">
+      <!-- Aquí tenemos que cargar los movimientos que leamos desde la API -->
+    </tbody>
+  </table>
+</section>
 
-    <section class="seccion-movimientos">
-      <button id="boton-recarga">Recargar</button>
-      <table class="paper">
-        <thead>
-          <tr>
-            <th class="titulo-tabla">Fecha</th>
-            <th class="titulo-tabla">Concepto</th>
-            <th class="titulo-tabla">Tipo</th>
-            <th class="titulo-tabla numero">Cantidad</th>
-            <th class="titulo-tabla acciones">Acciones</th>
-          </tr>
-        </thead>
-        <tbody id="cuerpo-tabla">
-          <!-- Aquí tenemos que cargar los movimientos que leamos desde la API -->
-        </tbody>
-      </table>
-    </section>
-
-  </main>
-
-  {% include 'components/footer.html' %}
-
-</body>
-
-</html>
+{% endblock contenido %}
