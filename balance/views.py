@@ -45,7 +45,6 @@ RUTA = app.config.get('RUTA')
 
 # TODO: actualizar movimiento por ID
 
-
 @app.route('/')
 def home():
     return render_template('index.html')

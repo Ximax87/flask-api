@@ -4,33 +4,48 @@ console.log("Empiezo a ejecutar JS");
 function cargarMovimientos() {
   console.log('Has llamado a la función cargarMovimientos()');
 
-  peticion.open('GET', 'http://localhost:5000/api/v1/movimientos', false);
+  peticion.open('GET', 'http://localhost:5000/api/v1/movimientos', true);
   peticion.send();
-  console.log(peticion.responseText);
-  const respuesta = JSON.parse(peticion.responseText);
-  const movimientos = respuesta.results;
 
-  let html = '';
-  for (let i = 0; i < movimientos.length; i = i + 1) {
-    const mov = movimientos[i];
-    console.log('Movimiento', mov);
-    html = html + `
-      <tr>
-        <td>${mov.fecha}</td>
-        <td>${mov.concepto}</td>
-        <td>${mov.tipo}</td>
-        <td>${mov.cantidad}</td>
-      </tr>
-    `;
+  console.log('FIN de la función cargarMovimientos()');
+};
+
+function mostrarMovimientos() {
+  console.log('Entramos en la función mostrarMovimientos', this);
+
+  if (this.readyState === 4 && this.status === 200) {
+    console.log('---- TODO OK ----');
+    const respuesta = JSON.parse(peticion.responseText);
+    const movimientos = respuesta.results;
+
+    let html = '';
+    for (let i = 0; i < movimientos.length; i = i + 1) {
+      const mov = movimientos[i];
+      html = html + `
+        <tr>
+          <td>${mov.fecha}</td>
+          <td>${mov.concepto}</td>
+          <td>${mov.tipo}</td>
+          <td>${mov.cantidad}</td>
+        </tr>
+      `;
+    }
+
+    const tabla = document.querySelector('#cuerpo-tabla');
+    tabla.innerHTML = html;
+  } else {
+    console.error('---- Algo ha ido mal en la petición ----');
+    alert('Error al cargar los movimientos');
   }
 
-  const tabla = document.querySelector('#cuerpo-tabla');
-  tabla.innerHTML += html;
-};
+  console.log('FIN de la función mostrarMovimientos');
+}
 
 window.onload = function () {
   console.log('Función anónima al finalizar la carga de la ventana');
   const boton = document.querySelector('#boton-recarga');
   boton.addEventListener('click', cargarMovimientos);
+
   cargarMovimientos();
+  peticion.onload = mostrarMovimientos;
 };
