@@ -23,6 +23,15 @@ function mostrarMovimientos() {
     let html = '';
     for (let i = 0; i < movimientos.length; i = i + 1) {
       const mov = movimientos[i];
+
+      if (mov.tipo === 'G') {
+        mov.tipo = 'Gasto';
+      } else if (mov.tipo === 'I') {
+        mov.tipo = 'Ingreso';
+      } else {
+        mov.tipo = '---';
+      }
+
       html = html + `
         <tr>
           <td>${mov.fecha}</td>
