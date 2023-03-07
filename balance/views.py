@@ -59,14 +59,63 @@ def listar_movimientos():
         db = DBManager(RUTA)
         sql = 'SELECT * FROM movimientos'
         movimientos = db.consultaSQL(sql)
-        resultado = {
-            "status": "success",
-            "results": movimientos
-        }
+        if len(movimientos) > 0:
+            resultado = {
+                "status": "success",
+                "results": movimientos
+            }
+            status_code = 200
+        else:
+            resultado = {
+                'status': 'error',
+                'message': f'No hay movimientos en el sistema'
+            }
+            status_code = 404
+
     except Exception as error:
         resultado = {
             "status": "error",
             "message": str(error)
         }
+        status_code = 500
 
-    return jsonify(resultado)
+    return jsonify(resultado), status_code
+
+
+@app.route('/api/v1/movimientos/<int:id>')
+def get_movimiento(id):
+    """
+    instanciar DBManager
+    preparar la consulta
+    ejecutar la consulta
+    leer el resultado
+    si ok:
+      resultado es success / movimiento
+    si error:
+      resultado es error / mensaje
+    devolvemos el resultado
+    """
+
+    try:
+        db = DBManager(RUTA)
+        mov = db.obtenerMovimiento(id)
+        if mov:
+            resultado = {
+                'status': 'success',
+                'results': mov
+            }
+            status_code = 200
+        else:
+            resultado = {
+                'status': 'error',
+                'message': f'No he encontrado un movimiento con el ID={id}'
+            }
+            status_code = 404
+    except Exception as error:
+        resultado = {
+            'status': 'error',
+            'message': str(error)
+        }
+        status_code = 500
+
+    return jsonify(resultado), status_code
