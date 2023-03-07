@@ -133,3 +133,41 @@ a.button {
 .exito-flash .mensajes-flash {
   margin-left: 2rem;
 }
+
+
+/* Spinner / loader / overlay */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, .5);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay.off {
+  display: none;
+}
+
+.doble-anillo {
+  width: 64px;
+  height: 64px;
+  border: 6px solid white;
+  border-radius: 50%;
+  border-color: white transparent;
+  animation: giro 1s linear infinite;
+}
+
+@keyframes giro {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
