@@ -43,9 +43,7 @@ Por ejemplo, un movimiento:
 RUTA = app.config.get('RUTA')
 
 
-# TODO: obtener un movimiento por ID
 # TODO: actualizar movimiento por ID
-# TODO: eliminar movimiento por ID
 
 
 @app.route('/')
@@ -115,6 +113,56 @@ def get_movimiento(id):
         resultado = {
             'status': 'error',
             'message': str(error)
+        }
+        status_code = 500
+
+    return jsonify(resultado), status_code
+
+
+@app.route('/api/v1/movimientos/<int:id>', methods=['DELETE'])
+def eliminar_movimiento(id):
+    """
+    Instanciar DBManager
+    Comprobar si existe el movimiento con ese ID
+    Si existe:
+        Preparar sql de la consulta de eliminación
+        Ejecutar la consulta de eliminación
+        si se ha borrado:
+            resultado = ok
+        si no:
+            resultado = ko
+            mensaje = error al borrar
+    si no existe:
+        resultado = ko
+        mensaje = No existe
+    """
+    try:
+        db = DBManager(RUTA)
+        mov = db.obtenerMovimiento(id)
+        if mov:
+            sql = 'DELETE FROM movimientos WHERE id=?'
+            esta_borrado = db.consultaConParametros(sql, (id,))
+            if esta_borrado:
+                resultado = {
+                    'status': 'success'
+                }
+                status_code = 204
+            else:
+                resultado = {
+                    'status': 'error',
+                    'message': f'No se ha eliminado el movimiento con ID={id}'
+                }
+                status_code = 500
+        else:
+            resultado = {
+                'status': 'error',
+                'message': f'No existe un movimiento con ID={id} para eliminar'
+            }
+            status_code = 404
+    except:
+        resultado = {
+            'status': 'error',
+            'message': 'Error desconocido en el servidor'
         }
         status_code = 500
 
