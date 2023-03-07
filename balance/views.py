@@ -43,8 +43,8 @@ Por ejemplo, un movimiento:
 
 RUTA = app.config.get('RUTA')
 
-# TODO: crear un movimiento
-# TODO: actualizar movimiento por ID
+# TODO: programar endpoint para crear un movimiento
+# TODO: programar endpoint para actualizar movimiento por ID
 
 
 @app.route('/')
