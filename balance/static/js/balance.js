@@ -1,8 +1,10 @@
+let spinner;
 const peticion = new XMLHttpRequest();
 console.log("Empiezo a ejecutar JS");
 
 function cargarMovimientos() {
   console.log('Has llamado a la función cargarMovimientos()');
+  spinner.classList.remove('off');
 
   peticion.open('GET', 'http://localhost:5000/api/v1/movimientos', true);
   peticion.send();
@@ -38,6 +40,7 @@ function mostrarMovimientos() {
     alert('Error al cargar los movimientos');
   }
 
+  spinner.classList.add('off');
   console.log('FIN de la función mostrarMovimientos');
 }
 
@@ -45,6 +48,7 @@ window.onload = function () {
   console.log('Función anónima al finalizar la carga de la ventana');
   const boton = document.querySelector('#boton-recarga');
   boton.addEventListener('click', cargarMovimientos);
+  spinner = document.querySelector('#spinner');
 
   cargarMovimientos();
   peticion.onload = mostrarMovimientos;
