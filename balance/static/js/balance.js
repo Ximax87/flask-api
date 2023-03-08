@@ -6,7 +6,7 @@ function cargarMovimientos() {
   console.log('Has llamado a la función cargarMovimientos()');
   spinner.classList.remove('off');
 
-  peticion.open('GET', 'http://localhost:5000/api/v1/movimientos', true);
+  peticion.open('GET', 'http://127.0.0.1:5000//api/v1/movimientos', true);
   peticion.send();
 
   console.log('FIN de la función cargarMovimientos()');
