@@ -33,7 +33,14 @@ function mostrarMovimientos() {
       }
 
       // TODO: Fecha en formato ES
-      // TODO: Ajustar los decimales de la cantidad
+      // Ajustar los decimales de la cantidad
+      const opciones = {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      };
+      const formateador = new Intl.NumberFormat("es-ES", opciones);
+      const cantidad = formateador.format(mov.cantidad);
+
       // TODO: Incluir los botones de acciones
 
       html = html + `
@@ -41,7 +48,7 @@ function mostrarMovimientos() {
           <td>${mov.fecha}</td>
           <td>${mov.concepto}</td>
           <td>${mov.tipo}</td>
-          <td class="numero">${mov.cantidad}</td>
+          <td class="numero">${cantidad}</td>
         </tr>
       `;
     }
