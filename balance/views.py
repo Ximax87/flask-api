@@ -1,4 +1,4 @@
-from flask import jsonify, render_template
+from flask import jsonify, render_template, request
 
 from . import app
 from .forms import MovimientoForm
@@ -6,45 +6,39 @@ from .models import DBManager
 
 
 """
-Verbos y formato de endpoints
-
-GET /movimientos ----------> LISTAR movimientos
-POST /movimientos ---------> CREAR un movimiento nuevo
-
-GET /movimientos/1 --------> LEER el movimiento con ID=1
-POST /movimientos/1 -------> ACTUALIZAR el movimiento con ID=1 (sobreescribe todo el objeto)
-PUT /movimientos/1 --------> ACTUALIZAR el movimiento con ID=1 (sobreescribe parcialmente)
-DELETE /movimientos/1 -----> ELIMINAR el movimiento con ID=1
-
-IMPORTANTE!!!
-Versionar los endpoint (son un contrato)
-/api/v1/...
-
-
-/api/v1/facturas
-/api/v2/movimientos
-/api/v1/contatos
-/api/v1/usuarios
-/api/v1/donaciones
-/api/v1/compras
-
-Devuelve un array de objetos JSON o un objeto JSON.
-
-Por ejemplo, un movimiento:
-
-{
-  "id": 1,
-  "fecha": "2023-02-27",
-  "concepto": "Camiseta",
-  "tipo": "G",
-  "cantidad": 12.35
-}
+    Verbos y formato de endpoints
+    GET /movimientos ----------> LISTAR movimientos
+    POST /movimientos ---------> CREAR un movimiento nuevo
+    GET /movimientos/1 --------> LEER el movimiento con ID=1
+    POST /movimientos/1 -------> ACTUALIZAR el movimiento con ID=1 (sobreescribe todo el objeto)
+    PUT /movimientos/1 --------> ACTUALIZAR el movimiento con ID=1 (sobreescribe parcialmente)
+    DELETE /movimientos/1 -----> ELIMINAR el movimiento con ID=1
+    IMPORTANTE!!!
+    Versionar los endpoint (son un contrato)
+    /api/v1/...
+    /api/v1/facturas
+    /api/v2/movimientos
+    /api/v1/contatos
+    /api/v1/usuarios
+    /api/v1/donaciones
+    /api/v1/compras
+    Devuelve un array de objetos JSON o un objeto JSON.
+    Por ejemplo, un movimiento:
+    {
+    "id": 1,
+    "fecha": "2023-02-27",
+    "concepto": "Camiseta",
+    "tipo": "G",
+    "cantidad": 12.35
+    }
 """
 
 RUTA = app.config.get('RUTA')
 
 # TODO: programar endpoint para crear un movimiento
 # TODO: programar endpoint para actualizar movimiento por ID
+
+# Devuelve HTML, son vistas estándar (clásicas)
 
 
 @app.route('/')
@@ -57,6 +51,8 @@ def form_nuevo():
     formulario = MovimientoForm()
     return render_template('form_movimiento.html', form=formulario, accion='/nuevo')
 
+
+# Llamadas a la API, devuelven JSON
 
 @app.route('/api/v1/movimientos')
 def listar_movimientos():
@@ -172,5 +168,55 @@ def eliminar_movimiento(id):
             'message': 'Error desconocido en el servidor'
         }
         status_code = 500
+
+    return jsonify(resultado), status_code
+
+
+@app.route('/api/v1/movimientos', methods=['POST'])
+def insertar_movimiento():
+    """
+    201 - Creado el movimiento correctamente
+    400 - Si los datos recibidos no son válidos
+    500 - Si hay un error en el servidor
+    """
+    try:
+        json = request.get_json()
+        form = MovimientoForm(data=json)
+
+        if form.validate():
+            # si el formulario es válido
+            db = DBManager(RUTA)
+            # sql = 'INSERT INTO movimientos (fecha, concepto, tipo, cantidad) VALUES (?, ?, ?, ?)'
+            # params = (form.fecha.data, form.concepto.data,
+            #           form.tipo.data, form.cantidad.data)
+            sql = 'INSERT INTO movimientos (fecha, concepto, tipo, cantidad) VALUES (:fecha, :concepto, :tipo, :cantidad)'
+            params = request.json
+            isSuccess = db.consultaConParametros(sql, params)
+            if isSuccess:
+                status_code = 201
+                resultado = {
+                    'status': 'success',
+                }
+            else:
+                status_code = 500
+                resultado = {
+                    'status': 'error',
+                    'message': 'No se pudo insertar el movimiento'
+                }
+        else:
+            # si el formulario tiene errores de validación
+            status_code = 400
+            resultado = {
+                'status': 'error',
+                'message': 'Los datos recibidos no son válidos',
+                'errors': form.errors
+            }
+
+    except:
+        status_code = 500
+        resultado = {
+            'status': 'error',
+            'message': 'Error desconocido en el servidor'
+        }
 
     return jsonify(resultado), status_code
