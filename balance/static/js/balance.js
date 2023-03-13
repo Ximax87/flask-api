@@ -79,7 +79,7 @@ function mostrarMovimientos() {
             <a class="link-icon btn-delete">
             <i class=fa-solid fa-trash" data-id="${mov.id}></i>
 
-            <a href="/modificar/{{ m.id }}" class="link-icon">
+            <a href="/modificar/${mov.id}" class="link-icon">
             <i class=fa-solid fa-pen-to-square"></i>
           
           </td>

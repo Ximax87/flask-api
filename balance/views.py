@@ -2,6 +2,7 @@ from flask import render_template
 
 from . import app
 from .forms import MovimientoForm
+from .models import DBManager
 
 
 """
@@ -31,7 +32,7 @@ from .forms import MovimientoForm
     "cantidad": 12.35
     }
 """
-
+RUTA = app.config.get('RUTA')
 
 # TODO: programar endpoint para actualizar movimiento por ID
 
@@ -46,4 +47,12 @@ def home():
 @app.route('/nuevo')
 def form_nuevo():
     formulario = MovimientoForm()
-    return render_template('form_movimiento.html', form=formulario, accion='/nuevo')
+    return render_template('form_movimiento.html', form=formulario)
+
+
+@app.route("/modificar/<int:id>")
+def form_modificar(id):
+    db = DBManager(RUTA)
+    mov = db.obtenerMovimiento(id)
+    formulario = MovimientoForm(data=mov)
+    return render_template("form_movimiento.html", form=formulario)

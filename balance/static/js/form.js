@@ -28,9 +28,20 @@ function sendForm(event) {
     // function() { console.log("Hola"); }
     // () => console.log("Hola");
 
+    const campoID = document.getElementById("id");
+    let operacion;
+    let url;
+    if (!campoID.value) {
+        operacion = "POST";
+        url = 'http://localhost:5000/api/v1/movimientos'
+    } else {
+        operacion = "PUT";
+        url = `http://localhost:5000/api/v1/movimientos/${campo.ID.value}`;
+    }
+
     // enviar la petición con los datos a la API
-    fetch('http://localhost:5000/api/v1/movimientos', {
-        method: 'POST',
+    fetch(url, {
+        method: operacion,
         headers: {
             'Content-Type': 'application/json'
         },
@@ -57,9 +68,12 @@ function sendForm(event) {
                 // TODO: redireccionar a la página de inicio
                 // TODO: mostrar mensaje de OK y vaciar el formulario (para poder insertar otro movimiento)
                 // TODO: el mensaje debe desaparecer tras unos segundos (5)
-                alert('Se ha insertado el movimiento');
-            }
-        })
+                if (operacion === "PUT") {
+                    alert("Se ha modificado el movimiento");
+                } else {
+                    alert('Se ha insertado el movimiento');
+                }
+            })
         .catch(
             (error) => console.error('4. ERROR!', 'No se ha podido acceder a la API')
         );

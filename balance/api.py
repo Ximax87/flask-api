@@ -175,3 +175,8 @@ def insertar_movimiento():
         }
 
     return jsonify(resultado), status_code
+
+
+@app.route("/api/v1/movimientos/<int:id>", methods=["PUT"])
+def modificar_movimiento():
+    return "TODO: act mov"
