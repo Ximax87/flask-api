@@ -1,8 +1,8 @@
 from flask import jsonify, request
-from .import app
+
+from . import app
 from .forms import MovimientoForm
 from .models import DBManager
-
 
 # Llamadas a la API, devuelven JSON
 
@@ -14,7 +14,7 @@ def listar_movimientos():
     try:
         db = DBManager(RUTA)
         sql = 'SELECT * FROM movimientos'
-        movimientos = db.consultaSQL(sql)
+        movimientos = db.consultaSQL(sql, 1)
         if len(movimientos) > 0:
             resultado = {
                 "status": "success",
@@ -101,6 +101,8 @@ def eliminar_movimiento(id):
             sql = 'DELETE FROM movimientos WHERE id=?'
             esta_borrado = db.consultaConParametros(sql, (id,))
             if esta_borrado:
+                # este resultado se ignora si la cabecera
+                # envía el estado 204 NO CONTENT
                 resultado = {
                     'status': 'success'
                 }
@@ -176,7 +178,64 @@ def insertar_movimiento():
 
     return jsonify(resultado), status_code
 
+# TODO: programar endpoint para actualizar movimiento por ID
 
-@app.route("/api/v1/movimientos/<int:id>", methods=["PUT"])
-def modificar_movimiento():
-    return "TODO: act mov"
+
+@app.route('/api/v1/movimientos/<int:id>', methods=['PUT'])
+def modificar_movimiento(id):
+    """
+    200 - OK. La modificación se ha realizado
+    400 - Si los datos recibidos no son válidos
+    500 - Si hay error en el servidor
+    """
+
+    try:
+        json = request.get_json()
+        form = MovimientoForm(data=json)
+
+        if form.validate():
+            # El formulario es válido
+            if id == form.id.data:
+                db = DBManager(RUTA)
+                sql = 'UPDATE movimientos SET fecha=?, concepto=?, tipo=?, cantidad=? WHERE id=?'
+                params = (
+                    form.fecha.data,
+                    form.concepto.data,
+                    form.tipo.data,
+                    form.cantidad.data,
+                    form.id.data
+                )
+                modificado = db.consultaConParametros(sql, params)
+                if modificado:
+                    status_code = 200
+                    resultado = {
+                        'status': 'success',
+                        'results': form.data
+                    }
+                else:
+                    status_code = 500
+                    resultado = {
+                        'status': 'error',
+                        'message': 'No se ha podido insertar el movimiento'
+                    }
+            else:
+                status_code = 400
+                resultado = {
+                    'status': 'error',
+                    'message': 'Los datos enviados son inconsistentes'
+                }
+        else:
+            status_code = 400
+            resultado = {
+                'status': 'error',
+                'message': 'Los datos recibidos no son válidos',
+                'errors': form.errors
+            }
+
+    except:
+        status_code = 500
+        resultado = {
+            'status': 'error',
+            'message': 'Error desconocido en el servidor'
+        }
+    return jsonify(resultado), status_code

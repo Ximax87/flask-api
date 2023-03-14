@@ -1,10 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import DateField, FloatField, HiddenField, RadioField, StringField, SubmitField
+from wtforms import DateField, FloatField, IntegerField, RadioField, StringField, SubmitField
+from wtforms.widgets import HiddenInput
 from wtforms.validators import DataRequired
 
 
 class MovimientoForm(FlaskForm):
-    id = HiddenField()
+    id = IntegerField(default=0, widget=HiddenInput())
     fecha = DateField('Fecha', validators=[DataRequired(
         message="Debes introducir una fecha")])
     concepto = StringField('Concepto', validators=[

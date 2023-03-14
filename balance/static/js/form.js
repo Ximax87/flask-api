@@ -28,15 +28,21 @@ function sendForm(event) {
     // function() { console.log("Hola"); }
     // () => console.log("Hola");
 
-    const campoID = document.getElementById("id");
+    // ¿Cómo sé si es POST (crear) o PUT (actualizar)?
+    // opción 1: la url no es la misma
+    // opción 2: si el ID ya existe la BBDD  ---- La BBDD está en el servidor :(
+    // opción 3: la URL tiene el ID
+    // opción 4: el formulario tiene in valor en ID
+
+    const campoId = document.getElementById('id');
     let operacion;
     let url;
-    if (!campoID.value) {
-        operacion = "POST";
-        url = 'http://localhost:5000/api/v1/movimientos'
+    if (campoId.value > 0) {
+        operacion = 'PUT';
+        url = `http://localhost:5000/api/v1/movimientos/${campoId.value}`;
     } else {
-        operacion = "PUT";
-        url = `http://localhost:5000/api/v1/movimientos/${campo.ID.value}`;
+        operacion = 'POST';
+        url = 'http://localhost:5000/api/v1/movimientos';
     }
 
     // enviar la petición con los datos a la API
@@ -65,15 +71,17 @@ function sendForm(event) {
                 alert(`ERROR:\n${data.message}`);
             } else {
                 // A ELEGIR
-                // TODO: redireccionar a la página de inicio
-                // TODO: mostrar mensaje de OK y vaciar el formulario (para poder insertar otro movimiento)
+                // DONE: redireccionar a la página de inicio
+                // DESCARTADA: mostrar mensaje de OK y vaciar el formulario (para poder insertar otro movimiento)
                 // TODO: el mensaje debe desaparecer tras unos segundos (5)
-                if (operacion === "PUT") {
-                    alert("Se ha modificado el movimiento");
+                if (operacion === 'PUT') {
+                    alert('Se ha modificado el movimiento');
                 } else {
                     alert('Se ha insertado el movimiento');
                 }
-            })
+                window.location.href = '/';
+            }
+        })
         .catch(
             (error) => console.error('4. ERROR!', 'No se ha podido acceder a la API')
         );

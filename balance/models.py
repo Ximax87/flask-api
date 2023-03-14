@@ -14,9 +14,11 @@ class DBManager:
     def __init__(self, ruta):
         self.ruta = ruta
 
-    def consultaSQL(self, consulta):
+    def consultaSQL(self, consulta, pag=1, nreg=5):
         # 1. Conectar a la base de datos
         conexion = sqlite3.connect(self.ruta)
+        offset = nreg*(pag - 1)
+        consulta = f'{consulta} LIMIT {nreg} OFFSET {offset}'
 
         # 2. Abrir un cursor
         cursor = conexion.cursor()

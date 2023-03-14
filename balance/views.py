@@ -32,11 +32,11 @@ from .models import DBManager
     "cantidad": 12.35
     }
 """
-RUTA = app.config.get('RUTA')
 
-# TODO: programar endpoint para actualizar movimiento por ID
 
 # Devuelve HTML, son vistas estándar (clásicas)
+
+RUTA = app.config.get('RUTA')
 
 
 @app.route('/')
@@ -50,9 +50,9 @@ def form_nuevo():
     return render_template('form_movimiento.html', form=formulario)
 
 
-@app.route("/modificar/<int:id>")
+@app.route('/modificar/<int:id>')
 def form_modificar(id):
     db = DBManager(RUTA)
     mov = db.obtenerMovimiento(id)
     formulario = MovimientoForm(data=mov)
-    return render_template("form_movimiento.html", form=formulario)
+    return render_template('form_movimiento.html', form=formulario)

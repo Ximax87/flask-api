@@ -6,7 +6,7 @@ function cargarMovimientos() {
   console.log('Has llamado a la función cargarMovimientos()');
   spinner.classList.remove('off');
 
-  peticion.open('GET', 'http://127.0.0.1:5000//api/v1/movimientos', true);
+  peticion.open('GET', 'http://localhost:5000/api/v1/movimientos', true);
   peticion.send();
 
   console.log('FIN de la función cargarMovimientos()');
@@ -14,24 +14,26 @@ function cargarMovimientos() {
 
 function borrarMovimiento(event) {
   const target = event.target;
-  const id = target.getAttribute("data-id");
-  fetch(`http://127.0.0.1:5000//api/v1/movimientos/${id}`, {
-    method: "DELETE",
+  const id = target.getAttribute('data-id');
+  fetch(`http://localhost:5000/api/v1/movimientos/${id}`, {
+    method: 'DELETE',
     headers: {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json'
     }
   })
     .then((response) => {
       if (response.status === 204) {
-        alert(`El movimientoi ha sido eliminado correctamente.`);
+        alert(`El movimiento ha sido eliminado correctamente.`);
         cargarMovimientos();
+        // FIXME: Simplemente eliminar la línea del movimiento (sin recargarlos todos)
       } else {
-        alert(`ERROR: La eliminación dle movimiento ha fallado`);
+        alert('ERROR: La eliminación del movimiento ha fallado.');
       }
     })
     .catch(
-      (error) => alert(`Error desconocido al borrar el movimiento (API)`)
+      (error) => alert('ERROR DESCONOCIDO al borrar el movimiento (API)')
     );
+
 }
 
 function mostrarMovimientos() {
@@ -56,33 +58,34 @@ function mostrarMovimientos() {
 
       // Fecha en formato ES
       const fecha = new Date(mov.fecha);
-      const fechaFormateada = fecha.toLocaleDateString()
-
+      // puedo pasar la cultura es-ES o dejar que use la que tiene por defecto
+      const fechaFormateada = fecha.toLocaleDateString();
 
       // Ajustar los decimales de la cantidad
       const opciones = {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
       };
-      const formateador = new Intl.NumberFormat("es-ES", opciones);
+      const formateador = new Intl.NumberFormat('es-ES', opciones);
       const cantidad = formateador.format(mov.cantidad);
 
-      // TODO: Incluir los botones de acciones
+      // const laCantidad = mov.cantidad.toLocaleString();
+      // const laCantidad = mov.cantidad.toFixed(2);
 
       html = html + `
         <tr>
-          <td>${fechaFormateada}</td>
+          <td class="fecha">${fechaFormateada}</td>
           <td>${mov.concepto}</td>
           <td>${mov.tipo}</td>
           <td class="numero">${cantidad}</td>
           <td class="acciones">
             <a class="link-icon btn-delete">
-            <i class=fa-solid fa-trash" data-id="${mov.id}></i>
-
+              <i class="fa-solid fa-trash" data-id="${mov.id}"></i>
+            </a>
             <a href="/modificar/${mov.id}" class="link-icon">
-            <i class=fa-solid fa-pen-to-square"></i>
-          
-          </td>
+              <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+        </td>
         </tr>
       `;
     }
@@ -90,9 +93,10 @@ function mostrarMovimientos() {
     const tabla = document.querySelector('#cuerpo-tabla');
     tabla.innerHTML = html;
 
-    const botonesBorrar = document.querySelectorAll(".btn-delete");
+    const botonesBorrar = document.querySelectorAll('.btn-delete');
+    // for btn in botonesBorrar:
     botonesBorrar.forEach((btn) => {
-      btn.addEventListener("click", borrarMovimiento);
+      btn.addEventListener('click', borrarMovimiento);
     });
 
   } else {
@@ -106,8 +110,6 @@ function mostrarMovimientos() {
 
 window.onload = function () {
   console.log('Función anónima al finalizar la carga de la ventana');
-  const boton = document.querySelector('#boton-recarga');
-  boton.addEventListener('click', cargarMovimientos);
   spinner = document.querySelector('#spinner');
 
   cargarMovimientos();

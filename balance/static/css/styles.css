@@ -34,7 +34,7 @@ nav a:visited {
 }
 
 main {
-  max-width: 600px;
+  max-width: 760px;
   margin: auto;
   padding: 20px;
 }
@@ -48,6 +48,7 @@ table.paper {
   text-align: left;
 }
 
+.fecha,
 .numero,
 .acciones {
   text-align: right;
