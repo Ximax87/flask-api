@@ -6,7 +6,7 @@ function cargarMovimientos() {
   console.log('Has llamado a la función cargarMovimientos()');
   spinner.classList.remove('off');
 
-  peticion.open('GET', 'http://localhost:5000/api/v1/movimientos', true);
+  peticion.open('GET', 'http://localhost:4000/api/v1/movimientos', true);
   peticion.send();
 
   console.log('FIN de la función cargarMovimientos()');
@@ -15,7 +15,7 @@ function cargarMovimientos() {
 function borrarMovimiento(event) {
   const target = event.target;
   const id = target.getAttribute('data-id');
-  fetch(`http://localhost:5000/api/v1/movimientos/${id}`, {
+  fetch(`http://localhost:4000/api/v1/movimientos/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json'
